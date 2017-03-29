@@ -1,3 +1,6 @@
 public class TimTest(){
-  System.out.println(Tim was here);
+  
+  public static void main(String[] args){
+    System.out.println(Tim was here);
+    }
 }
