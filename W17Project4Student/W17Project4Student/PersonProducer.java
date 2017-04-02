@@ -1,7 +1,7 @@
 /**
  * 
  */
-package W17Project4StudentHelp;
+package FrontEnd;
 
 import java.util.Random;
 
@@ -24,16 +24,18 @@ public class PersonProducer implements ClockListener {
 		this.eatery = eatery;
 		this.numOfTicksNextPerson = numOfTicksNextPerson;
 		this.averageEateryTime = averageEateryTime;
-		//r.setSeed(13);    // This will cause the same random numbers
 	}
 	
+	/**
+	 * uses the clock from clock listener to put people in line of some eatery. 
+	 */
 	public void event(int tick) {
 		if (nextPerson <= tick) {
 			nextPerson = tick + numOfTicksNextPerson;
 			
 			Person person = new Person();
 			
-			int rNumber = (int)(Math.random() * 100);
+			//int rNumber = (int)(Math.random() * 100);
 
 			person.setEateryTime(averageEateryTime*0.5*r.nextGaussian() + averageEateryTime +.5);
 			person.setTickTime(tick);
