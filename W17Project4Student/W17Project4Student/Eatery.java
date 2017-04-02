@@ -1,7 +1,4 @@
-/**
- * 
- */
-package FrontEnd;
+package FrontEnd; //FIXME: Remove before submitting
 import java.util.ArrayList;
 /**
  * @author   Roger Ferguson
