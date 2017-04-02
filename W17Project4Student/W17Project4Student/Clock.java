@@ -1,14 +1,14 @@
 /**
  * 
  */
-package W17Project4StudentHelp;
+package FrontEnd;
 
 /**
  * @author   Roger Ferguson
  */
 public class Clock {
 
-	private ClockListener[] myListeners;
+	private ClockListener[] myListeners; 		//holds eaterys and personProducers
 	private int numListeners;
 	private int MAX = 100;
 
@@ -17,10 +17,15 @@ public class Clock {
 		myListeners = new ClockListener[MAX];
 	}
 
-	public void run(int endingTime) {
+	/**
+	 * Sends the current time of the clock to the clock listener. From the clock listener, the time is then set to any class 
+	 * Implements the clock listener class so that it is able to see the current time and use it how it wants. 
+	 * @param endingTime
+	 */
+	public void run(int endingTime) { 		
 		for (int currentTime = 0; currentTime <= endingTime; currentTime++) {
 			for (int j = 0; j < numListeners; j++)
-				myListeners[j].event(currentTime);
+				myListeners[j].event(currentTime); 		//sends current time to the clock listener class. 
 		}
 	}
 
