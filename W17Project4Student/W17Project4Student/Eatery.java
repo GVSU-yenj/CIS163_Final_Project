@@ -1,7 +1,4 @@
-/**
- * 
- */
-package W17Project4StudentHelp;
+package FrontEnd; //FIXME: Remove before submitting
 import java.util.ArrayList;
 /**
  * @author   Roger Ferguson
@@ -18,10 +15,14 @@ public class Eatery implements ClockListener {
 	{
 		Q.add(person);
 		if (Q.size() > maxQlength)
-			maxQlength = Q.size();
+			maxQlength = Q.size(); 		//size that the Q has been
 	}
 	
-	public void event (int tick){
+	/**
+	 * getting the current clock from the clock listener class. 
+	 * using the clock (tick) to remove people from the eatery
+	 */
+	public void event (int tick){ 		
 		if (tick >= timeOfNextEvent) {
 //			if (person != null) { 			// Notice the delay that takes place here
 //				person.getDestination().add(person);    // take this person to the next station. 

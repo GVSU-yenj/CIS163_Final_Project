@@ -169,15 +169,4 @@ public class FCGUI extends JFrame implements KeyEventDispatcher, ActionListener 
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
-	public void runSim(){
-	  
-	}
-	
-	public static void main(String[] args){
-		FCGUI f = new FCGUI();
-		f.setVisible(true);
-	}
-
-
 }
