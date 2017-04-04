@@ -156,6 +156,14 @@ public class FCGUI extends JFrame implements ActionListener {
 		f.setVisible(true);
 	}
 
-
+	
+	public void runSim(){
+	  
+	}
+	
+	public static void main(String[] args){
+		FCGUI f = new FCGUI();
+		f.setVisible(true);
+  }
 }
 
