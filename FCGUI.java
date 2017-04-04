@@ -104,6 +104,9 @@ public class FCGUI extends JFrame implements KeyEventDispatcher, ActionListener 
 	      //Jmoney: might have to add actionListeners for my buttons.
 	      starter = new JButton("Start da Sim!");
 	      quitter = new JButton("Quit da Sim!");
+	      
+	      starter.addActionListener(this);
+	      quitter.addActionListener(this);
 	     
 	     Dimension d = new Dimension(40, 40);
 	     starter.setPreferredSize(d);
@@ -161,6 +164,7 @@ public class FCGUI extends JFrame implements KeyEventDispatcher, ActionListener 
 		secBeforeLeaveI = Integer.parseInt(secBeforeLeave.getText());
 		numEateriesI = Integer.parseInt(numEateries.getText());
 		
+		runSim(secToNextI, secPerCashierI, totalTimeI, secPerEateryI, secBeforeLeaveI, numEateriesI);
 		
 	}
 
@@ -170,8 +174,20 @@ public class FCGUI extends JFrame implements KeyEventDispatcher, ActionListener 
 		return false;
 	}
 	
-	public void runSim(){
-	  
+	public void runSim(int secToNextI, int secPerCashierI, int totalTimeI, int secPerEateryI, int secBeforeLeaveI, int numEateriesI){
+	      		Clock clk = new Clock();
+		Eatery booth = new Eatery();
+		
+		PersonProducer produce = new PersonProducer(booth, 20, 18);	
+		
+		clk.add(produce);
+		clk.add(booth);
+		
+		clk.run(100000);
+		
+		System.out.println("Through put is: " + booth.getThroughPut() + " people.");
+		System.out.println("People that are still in the Q:" + booth.getLeft() + " people.");
+		System.out.println ("Max Q length:" + booth.getMaxQlength() + " people.");
 	}
 	
 	public static void main(String[] args){
