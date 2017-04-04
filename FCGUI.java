@@ -151,6 +151,10 @@ public class FCGUI extends JFrame implements KeyEventDispatcher, ActionListener 
 	    this.pack();
 	}
 
+	/**
+	* @param e This will be the ActionEvent that the if statements in the method will look for
+	* to know what function to do.
+	*/
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -162,13 +166,6 @@ public class FCGUI extends JFrame implements KeyEventDispatcher, ActionListener 
 		secBeforeLeaveI = Integer.parseInt(secBeforeLeave.getText());
 		numEateriesI = Integer.parseInt(numEateries.getText());
 		
-		
-	}
-
-	@Override
-	public boolean dispatchKeyEvent(KeyEvent e) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 	
 	public void runSim(){
