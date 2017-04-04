@@ -5,34 +5,21 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 
 
-public class FCGUI extends JFrame implements KeyEventDispatcher, ActionListener {
+public class FCGUI extends JFrame implements ActionListener {
 	
 	  private static final long serialVersionUID = 1L;
-	  private JPanel inInfoPanel;
-	  private JPanel buttonPanel;
-	  private JPanel outInfoPanel;
-	  private JLabel Title;
-	  private JLabel blank;
-	  private JLabel STNLabel;
-	  private JTextArea secToNext;
-	  private JLabel SPCLabel;
-	  private JTextArea secPerCashier;
-	  private JLabel TTLabel;
-	  private JTextArea totalTime;
-	  private JLabel SPELabel;
-	  private JTextArea secPerEatery;
-	  private JLabel SBLLAbel;
-	  private JTextArea secBeforeLeave;
-	  private JLabel NELabel;
-	  private JTextArea numEateries;
+	  private JPanel inInfoPanel, buttonPanel, outInfoPanel;
+	  private JLabel Title, blank, STNLabel, SPCLabel, TTLabel; 
+	  private JLabel SPELabel, SBLLAbel, NELabel;
+	  private JTextArea secToNext, secPerCashier, totalTime, secPerEatery;
+	  private JTextArea secBeforeLeave, numEateries;
 	  private JButton starter;
 	  private JButton quitter;
-	  public int secToNextI, secPerCashierI, totalTimeI, secPerEateryI, secBeforeLeaveI, numEateriesI;
-	  
-	  private Sim S = new Sim();
+	  public int secToNextI, secPerCashierI, totalTimeI;
+	  public int secPerEateryI, secBeforeLeaveI, numEateriesI;
+	   
 			
 	  public FCGUI(){
 	    this.setDefaultCloseOperation(EXIT_ON_CLOSE);		
@@ -163,12 +150,12 @@ public class FCGUI extends JFrame implements KeyEventDispatcher, ActionListener 
 		
 		
 	}
-
-	@Override
-	public boolean dispatchKeyEvent(KeyEvent e) {
-		// TODO Auto-generated method stub
-		return false;
+	
+	public static void main(String[] args){
+		FCGUI f = new FCGUI();
+		f.setVisible(true);
 	}
+
 	
 	public void runSim(){
 	  
@@ -177,5 +164,6 @@ public class FCGUI extends JFrame implements KeyEventDispatcher, ActionListener 
 	public static void main(String[] args){
 		FCGUI f = new FCGUI();
 		f.setVisible(true);
-	}
+  }
 }
+
