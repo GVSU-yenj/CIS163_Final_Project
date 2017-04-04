@@ -91,6 +91,9 @@ public class FCGUI extends JFrame implements ActionListener {
 	      //Jmoney: might have to add actionListeners for my buttons.
 	      starter = new JButton("Start da Sim!");
 	      quitter = new JButton("Quit da Sim!");
+	      starter.addActionListener(this);
+	      quitter.addActionListener(this);
+		
 	     
 	     Dimension d = new Dimension(40, 40);
 	     starter.setPreferredSize(d);
@@ -98,9 +101,6 @@ public class FCGUI extends JFrame implements ActionListener {
 	     
 	     buttonPanel.add(starter);
 	     buttonPanel.add(quitter);
-	     
-	    
-	    
 	    
 	    outInfoPanel = new JPanel();
 	    GridLayout layout2 = new GridLayout(0, 2);
@@ -148,6 +148,25 @@ public class FCGUI extends JFrame implements ActionListener {
 		secBeforeLeaveI = Integer.parseInt(secBeforeLeave.getText());
 		numEateriesI = Integer.parseInt(numEateries.getText());
 		
+		runSim(secToNextI, secPerCashierI, totalTimeI, secPerEateryI, 
+		secBeforeLeaveI, numEateriesI);
+		
+	public void runSim(int secToNextI, int secPerCashierI, int totalTimeI, int secPerEateryI, int secBeforeLeaveI, int numEateriesI){
+  		Clock clk = new Clock();
+  		Eatery booth = new Eatery();
+
+  		PersonProducer produce = new PersonProducer(booth, 20, 18);	
+
+  		clk.add(produce);
+  		clk.add(booth);
+
+  		clk.run(100000);
+
+  		System.out.println("Through put is: " + booth.getThroughPut() + " people.");
+  		System.out.println("People that are still in the Q:" + booth.getLeft() + " people.");
+  		System.out.println ("Max Q length:" + booth.getMaxQlength() + " people.");
+}
+		
 		
 	}
 	
@@ -156,10 +175,6 @@ public class FCGUI extends JFrame implements ActionListener {
 		f.setVisible(true);
 	}
 
-	
-	public void runSim(){
-	  
-	}
 	
 }
 
