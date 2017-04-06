@@ -1,15 +1,20 @@
-<<<<<<< HEAD
 package FoodCourt;
 
 import java.awt.*;
 
 import javax.swing.*;
+
+import FrontEnd.Clock;
+import FrontEnd.Eatery;
+import FrontEnd.PersonProducer;
+import FrontEnd.Sim;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 
 
-public class FCGUI extends JFrame implements KeyEventDispatcher, ActionListener {
+
+public class FCGUI extends JFrame implements ActionListener {
 	
 	  private static final long serialVersionUID = 1L;
 	  private JPanel inInfoPanel;
@@ -27,7 +32,7 @@ public class FCGUI extends JFrame implements KeyEventDispatcher, ActionListener 
 	  private JTextArea secPerEatery;
 	  private JLabel SBLLAbel;
 	  private JTextArea secBeforeLeave;
-	  private JLabel NELabel;
+	  private JLabel NELabel, throughInfo, avgTimeInfo, numberPeopleInfo, maxQInfo;
 	  private JTextArea numEateries;
 	  private JButton starter;
 	  private JButton quitter;
@@ -105,10 +110,9 @@ public class FCGUI extends JFrame implements KeyEventDispatcher, ActionListener 
 	      //Jmoney: might have to add actionListeners for my buttons.
 	      starter = new JButton("Start da Sim!");
 	      quitter = new JButton("Quit da Sim!");
-	      
+	     
 	      starter.addActionListener(this);
 	      quitter.addActionListener(this);
-	     
 	     Dimension d = new Dimension(40, 40);
 	     starter.setPreferredSize(d);
 	     quitter.setPreferredSize(d);
@@ -133,10 +137,10 @@ public class FCGUI extends JFrame implements KeyEventDispatcher, ActionListener 
 	    JLabel numberPeople = new JLabel("Number of people left in line");
 	    JLabel maxQ = new JLabel("Max Q length cashier line");
 	    
-	    JLabel throughInfo = new JLabel(" ");
-	    JLabel avgTimeInfo = new JLabel(" ");
-	    JLabel numberPeopleInfo = new JLabel(" ");
-	    JLabel maxQInfo = new JLabel(" ");
+	    throughInfo = new JLabel(" ");
+	    avgTimeInfo = new JLabel(" ");
+	    numberPeopleInfo = new JLabel(" ");
+	    maxQInfo = new JLabel(" ");
 	    
 	    outInfoPanel.add(Title2);
 	    outInfoPanel.add(blank2);
@@ -154,30 +158,30 @@ public class FCGUI extends JFrame implements KeyEventDispatcher, ActionListener 
 	    this.pack();
 	}
 
-	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		if(e.getSource() == starter)
-		secToNextI = Integer.parseInt(secToNext.getText());
-		secPerCashierI = Integer.parseInt(secPerCashier.getText());
-		totalTimeI = Integer.parseInt(totalTime.getText());
-		secPerEateryI = Integer.parseInt(secPerEatery.getText());
-		secBeforeLeaveI = Integer.parseInt(secBeforeLeave.getText());
-		numEateriesI = Integer.parseInt(numEateries.getText());
-		
-		runSim(secToNextI, secPerCashierI, totalTimeI, secPerEateryI, secBeforeLeaveI, numEateriesI);
+		if(e.getSource() == starter){
+			System.out.println("Hello here in the action listener");
+			secToNextI = Integer.parseInt(secToNext.getText());
+			secPerCashierI = Integer.parseInt(secPerCashier.getText());
+			totalTimeI = Integer.parseInt(totalTime.getText());
+			secPerEateryI = Integer.parseInt(secPerEatery.getText());
+			secBeforeLeaveI = Integer.parseInt(secBeforeLeave.getText());
+			numEateriesI = Integer.parseInt(numEateries.getText());
+			
+			runSim(secToNextI, secPerCashierI, totalTimeI, secPerEateryI, secBeforeLeaveI, numEateriesI);
+		}
 		
 	}
 
-	@Override
-	public boolean dispatchKeyEvent(KeyEvent e) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 	
 	public void runSim(int secToNextI, int secPerCashierI, int totalTimeI, int secPerEateryI, int secBeforeLeaveI, int numEateriesI){
-	      		Clock clk = new Clock();
-		Eatery booth = new Eatery();
+		
+		
+		Clock clk = new Clock();
+		clk.run(100000);
+		int through;
+		/*Eatery booth = new Eatery();
 		
 		PersonProducer produce = new PersonProducer(booth, 20, 18);	
 		
@@ -186,9 +190,25 @@ public class FCGUI extends JFrame implements KeyEventDispatcher, ActionListener 
 		
 		clk.run(100000);
 		
-		System.out.println("Through put is: " + booth.getThroughPut() + " people.");
+		throughInfo.setText("Through put is: " + booth.getThroughPut() + " people.");
+		
+		//System.out.println("Through put is: " + booth.getThroughPut() + " people.");
 		System.out.println("People that are still in the Q:" + booth.getLeft() + " people.");
 		System.out.println ("Max Q length:" + booth.getMaxQlength() + " people.");
+		*/
+		
+		for(int i = 0; i < numEateriesI; i++){
+			Eatery Ex = new Eatery();
+			PersonProducer produce = new PersonProducer(Ex, secToNextI, secPerEateryI);
+			clk.add(produce);
+			clk.add(Ex);
+			
+			//through += Ex.getThroughPut();
+		}
+		
+		clk.run(totalTimeI);
+			
+		
 	}
 	
 	public static void main(String[] args){
@@ -196,6 +216,7 @@ public class FCGUI extends JFrame implements KeyEventDispatcher, ActionListener 
 		f.setVisible(true);
 	}
 }
+
 =======
 package FoodCourt;
 

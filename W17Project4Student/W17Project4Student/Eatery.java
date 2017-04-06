@@ -8,7 +8,7 @@ public class Eatery implements ClockListener {
 	
 	private int timeOfNextEvent = 0;
 	private int maxQlength = 0;
-	private Person person;   // this is the person at the Eatery. 
+	private Person person, tempPer;   // this is the person at the Eatery. 
 	private int completed = 0;
 	
 	public void add (Person person)
@@ -31,6 +31,7 @@ public class Eatery implements ClockListener {
 			
 			if (Q.size() >= 1) {
 				person = Q.remove(0);		// do not send this person as of yet, make them wait. 
+				setPerson(person);
 				timeOfNextEvent = tick + (int) (person.getBoothTime() + 1);
 				completed++;										
 			}	
@@ -48,4 +49,11 @@ public class Eatery implements ClockListener {
 	public int getThroughPut() {
 		return completed;
 	}
+	public void setPerson(Person p){
+		tempPer = p;
+	}
+	public Person personGetter(){
+		return tempPer;
+	}
 }
+
