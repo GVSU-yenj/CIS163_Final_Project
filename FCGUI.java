@@ -12,7 +12,9 @@ import FrontEnd.Sim;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
+/**
+*@author JMONEY, Jake Cousino, Tim Irish
+*/
 
 public class FCGUI extends JFrame implements ActionListener {
 	
