@@ -1,42 +1,35 @@
 package FoodCourt;
 
+
 import java.awt.*;
 
 import javax.swing.*;
 
+import FrontEnd.CIS163Q;
 import FrontEnd.Clock;
 import FrontEnd.Eatery;
+import FrontEnd.Person;
 import FrontEnd.PersonProducer;
 import FrontEnd.Sim;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Random;
 
 
 
 public class FCGUI extends JFrame implements ActionListener {
 	
 	  private static final long serialVersionUID = 1L;
-	  private JPanel inInfoPanel;
-	  private JPanel buttonPanel;
-	  private JPanel outInfoPanel;
-	  private JLabel Title;
-	  private JLabel blank;
-	  private JLabel STNLabel;
-	  private JTextArea secToNext;
-	  private JLabel SPCLabel;
-	  private JTextArea secPerCashier;
-	  private JLabel TTLabel;
-	  private JTextArea totalTime;
-	  private JLabel SPELabel;
-	  private JTextArea secPerEatery;
-	  private JLabel SBLLAbel;
-	  private JTextArea secBeforeLeave;
+	  private JPanel inInfoPanel, buttonPanel, outInfoPanel;
+	  private JLabel Title, blank, STNLabel, SPCLabel, TTLabel, SPELabel, SBLLAbel;
 	  private JLabel NELabel, throughInfo, avgTimeInfo, numberPeopleInfo, maxQInfo;
-	  private JTextArea numEateries;
-	  private JButton starter;
-	  private JButton quitter;
-	  public int secToNextI, secPerCashierI, totalTimeI, secPerEateryI, secBeforeLeaveI, numEateriesI;
+	  private JTextArea secToNext, secPerCashier, totalTime, secPerEatery, secBeforeLeave, numEateries;
+	  private JButton starter, quitter;
+	  private int secToNextI, secPerCashierI, totalTimeI, secPerEateryI, secBeforeLeaveI, numEateriesI, totalQLine;
+	  private ArrayList<Eatery> eateryArr = new ArrayList<>();
+	  private CIS163Q<Person> line = new CIS163Q<>();
 	  
 	  private Sim S = new Sim();
 			
@@ -63,42 +56,42 @@ public class FCGUI extends JFrame implements ActionListener {
 	    STNLabel = new JLabel("Seconds to the Next Person");
 	    inInfoPanel.add(STNLabel);
 	    
-	    secToNext = new JTextArea();
+	    secToNext = new JTextArea("20");
 	    secToNext.setBorder(BorderFactory.createLineBorder(Color.black));
 	    inInfoPanel.add(secToNext);
 	    
 	    SPCLabel = new JLabel("Seconds per Cashier");
 	    inInfoPanel.add(SPCLabel);
 	    
-	    secPerCashier = new JTextArea();
+	    secPerCashier = new JTextArea("10");
 	    secPerCashier.setBorder(BorderFactory.createLineBorder(Color.black));
 	    inInfoPanel.add(secPerCashier);
 	    
 	    TTLabel = new JLabel("Total Time");
 	    inInfoPanel.add(TTLabel);
 	    
-	    totalTime = new JTextArea();
+	    totalTime = new JTextArea("10000");
 	    totalTime.setBorder(BorderFactory.createLineBorder(Color.black));
 	    inInfoPanel.add(totalTime);
 	    
 	    SPELabel = new JLabel("Seconds per Eatery");
 	    inInfoPanel.add(SPELabel);
 	    
-	    secPerEatery = new JTextArea();
+	    secPerEatery = new JTextArea("60");
 	    secPerEatery.setBorder(BorderFactory.createLineBorder(Color.black));
 	    inInfoPanel.add(secPerEatery);
 	    
 	    SBLLAbel = new JLabel("Seconds Before Someone Leaves");
 	    inInfoPanel.add(SBLLAbel);
 	    
-	    secBeforeLeave = new JTextArea();
+	    secBeforeLeave = new JTextArea("900");
 	    secBeforeLeave.setBorder(BorderFactory.createLineBorder(Color.black));
 	    inInfoPanel.add(secBeforeLeave);
 	    
 	    NELabel = new JLabel("Number of Eateries");
 	    inInfoPanel.add(NELabel);
 	    
-	    numEateries = new JTextArea();
+	    numEateries = new JTextArea("5");
 	    numEateries.setBorder(BorderFactory.createLineBorder(Color.black));
 	    inInfoPanel.add(numEateries);
 	    
@@ -171,6 +164,9 @@ public class FCGUI extends JFrame implements ActionListener {
 			
 			runSim(secToNextI, secPerCashierI, totalTimeI, secPerEateryI, secBeforeLeaveI, numEateriesI);
 		}
+		if(e.getSource() == quitter){
+			System.exit(1);
+		}
 		
 	}
 
@@ -180,7 +176,8 @@ public class FCGUI extends JFrame implements ActionListener {
 		
 		Clock clk = new Clock();
 		clk.run(100000);
-		int through;
+		int through = 0, left = 0, max = 0;
+		
 		/*Eatery booth = new Eatery();
 		
 		PersonProducer produce = new PersonProducer(booth, 20, 18);	
@@ -202,13 +199,47 @@ public class FCGUI extends JFrame implements ActionListener {
 			PersonProducer produce = new PersonProducer(Ex, secToNextI, secPerEateryI);
 			clk.add(produce);
 			clk.add(Ex);
-			
+			eateryArr.add(Ex);
 			//through += Ex.getThroughPut();
 		}
-		
 		clk.run(totalTimeI);
-			
+		through = getTotalThru();
+		left = getTotalLeft();
+		//max = getTotalMaxQ();
 		
+		throughInfo.setText("Through put is: " + through + " people.");
+		numberPeopleInfo.setText("People that are still in the Q: " + left + " people.");
+		maxQInfo.setText("Max Q length: " + totalQLine + " people.");	
+	}
+	public int getTotalThru(){
+		int total = 0;
+		for(Eatery e: eateryArr){
+			total += e.getThroughPut();
+		}
+		return total;
+	}
+	
+	public int getTotalLeft(){
+		int total = 0;
+		for(Eatery e: eateryArr){
+			total += e.getLeft();
+		}
+		return total;
+	}
+	
+	public int getTotalMaxQ(){
+		int total;
+		total = line.size();
+		System.out.println(total);
+		return total;
+	}
+	
+	
+	public void addToLine(Person per){
+		line.enQ(per);
+		int size = line.size();
+		totalQLine = size;
+		System.out.println(size);
 	}
 	
 	public static void main(String[] args){
