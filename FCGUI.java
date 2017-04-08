@@ -17,7 +17,9 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
 
-
+/**
+*@author JMONEY, Jake Cousino, Tim Irish
+*/
 
 public class FCGUI extends JFrame implements ActionListener {
 	
