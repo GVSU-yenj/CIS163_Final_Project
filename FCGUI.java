@@ -1,6 +1,5 @@
 package FoodCourt;
 
-
 import java.awt.*;
 
 import javax.swing.*;
@@ -17,9 +16,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
 
-/**
-*@author JMONEY, Jake Cousino, Tim Irish
-*/
+
 
 public class FCGUI extends JFrame implements ActionListener {
 	
@@ -179,40 +176,34 @@ public class FCGUI extends JFrame implements ActionListener {
 		Clock clk = new Clock();
 		clk.run(100000);
 		int through = 0, left = 0, max = 0;
-		
-		/*Eatery booth = new Eatery();
-		
-		PersonProducer produce = new PersonProducer(booth, 20, 18);	
-		
-		clk.add(produce);
-		clk.add(booth);
-		
-		clk.run(100000);
-		
-		throughInfo.setText("Through put is: " + booth.getThroughPut() + " people.");
-		
-		//System.out.println("Through put is: " + booth.getThroughPut() + " people.");
-		System.out.println("People that are still in the Q:" + booth.getLeft() + " people.");
-		System.out.println ("Max Q length:" + booth.getMaxQlength() + " people.");
-		*/
+		int val = secBeforeLeaveI;
 		
 		for(int i = 0; i < numEateriesI; i++){
 			Eatery Ex = new Eatery();
 			PersonProducer produce = new PersonProducer(Ex, secToNextI, secPerEateryI);
 			clk.add(produce);
 			clk.add(Ex);
+			Ex.setBoothTime(val);
 			eateryArr.add(Ex);
+			
 			//through += Ex.getThroughPut();
 		}
 		clk.run(totalTimeI);
 		through = getTotalThru();
 		left = getTotalLeft();
-		//max = getTotalMaxQ();
+		max = getTotalMaxQ();
+		
+		System.out.println("Size of line: " + line.size());
 		
 		throughInfo.setText("Through put is: " + through + " people.");
 		numberPeopleInfo.setText("People that are still in the Q: " + left + " people.");
-		maxQInfo.setText("Max Q length: " + totalQLine + " people.");	
+		maxQInfo.setText("Max Q length: " + max + " people.");	
 	}
+	
+	public int getBoothTime(){
+		return this.secBeforeLeaveI;
+	}
+	
 	public int getTotalThru(){
 		int total = 0;
 		for(Eatery e: eateryArr){
@@ -230,10 +221,7 @@ public class FCGUI extends JFrame implements ActionListener {
 	}
 	
 	public int getTotalMaxQ(){
-		int total;
-		total = line.size();
-		System.out.println(total);
-		return total;
+		return totalQLine;
 	}
 	
 	
@@ -249,3 +237,4 @@ public class FCGUI extends JFrame implements ActionListener {
 		f.setVisible(true);
 	}
 }
+

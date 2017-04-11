@@ -1,5 +1,7 @@
 package FrontEnd; //FIXME: Remove before submitting
 import java.util.ArrayList;
+
+import FoodCourt.FCGUI;
 /**
  * @author   Roger Ferguson
  */
@@ -10,6 +12,9 @@ public class Eatery implements ClockListener {
 	private int maxQlength = 0;
 	private Person person, tempPer;   // this is the person at the Eatery. 
 	private int completed = 0;
+	private CIS163Q<Person> Que = new CIS163Q<Person>();
+	private double val;
+	
 	
 	public void add (Person person)
 	{
@@ -31,19 +36,33 @@ public class Eatery implements ClockListener {
 			
 			if (Q.size() >= 1) {
 				person = Q.remove(0);		// do not send this person as of yet, make them wait. 
-				setPerson(person);
+				Que.enQ(person);
 				timeOfNextEvent = tick + (int) (person.getBoothTime() + 1);
-				completed++;										
+				completed++;
+				System.out.println("Size of Eatery line: " + Que.size());
+				
 			}	
 		}
 	}
 	
-	public void getFlag() {
-		if(person.getFlag == 1){
-		person = Q.remove(0);
+	public void setBoothTime(int boothTime){
+		val = (double)boothTime;
+		sendBoothTime(val);
+	}
+	
+	/**
+	 * FIXME: null pointer exception in commented line. 
+	 * @param value
+	 */
+	public void sendBoothTime(double value){
+		//person.setEateryTime(value);
+	}
+	
+	public void getFlag(){
+		if(person.getFlag() ==1){
+			person = Q.remove(0);
 		}
 	}
-			
 	
 	public int getLeft() {
 		return Q.size();
@@ -63,4 +82,3 @@ public class Eatery implements ClockListener {
 		return tempPer;
 	}
 }
-
