@@ -6,12 +6,20 @@ package FrontEnd;
 /**
  * @author   Roger Ferguson
  */
-public class Person {
+public class Person implements clockListener {
 	private int tickTime;
+	private int flag
 	private Eatery Destination;
 	
 	// max time person stays in line
 	protected double boothTime;
+	
+	public void event(int tick){
+		if (boothTime == 300){
+			flag = 1;
+		}
+			
+	
 	
 	public double getBoothTime() {
 		return boothTime;
