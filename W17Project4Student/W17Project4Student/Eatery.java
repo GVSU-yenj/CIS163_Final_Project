@@ -39,7 +39,7 @@ public class Eatery implements ClockListener {
 	}
 	
 	public void getFlag() {
-		if(person.flag == 1){
+		if(person.getFlag == 1){
 		person = Q.remove(0);
 		}
 	}
