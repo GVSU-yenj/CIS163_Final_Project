@@ -18,8 +18,11 @@ public class Person implements clockListener {
 		if (boothTime == 300){
 			flag = 1;
 		}
-			
+	}
 	
+	public int getFlag(){
+		return flag;
+	}
 	
 	public double getBoothTime() {
 		return boothTime;
