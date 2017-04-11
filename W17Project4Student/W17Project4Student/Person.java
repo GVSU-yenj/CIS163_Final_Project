@@ -8,7 +8,7 @@ package FrontEnd;
  */
 public class Person implements clockListener {
 	private int tickTime;
-	private int flag
+	private int flag;
 	private Eatery Destination;
 	
 	// max time person stays in line
