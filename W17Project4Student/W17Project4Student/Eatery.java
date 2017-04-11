@@ -38,6 +38,13 @@ public class Eatery implements ClockListener {
 		}
 	}
 	
+	public void getFlag() {
+		if(person.flag == 1){
+		person = Q.remove(0);
+		}
+	}
+			
+	
 	public int getLeft() {
 		return Q.size();
 	}
