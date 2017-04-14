@@ -29,7 +29,7 @@ public class FCGUI extends JFrame implements ActionListener , ClockListener{
 	  private JLabel NELabel, throughInfo, avgTimeInfo, numberPeopleInfo, maxQInfo;
 	  private JTextArea secToNext, secPerCashier, totalTime, secPerEatery, secBeforeLeave, numEateries;
 	  private JButton starter, quitter;
-	  private int secToNextI, secPerCashierI, totalTimeI, secPerEateryI, secBeforeLeaveI, numEateriesI, totalQLine;
+	  private int secToNextI, secPerCashierI, totalTimeI, secPerEateryI, secBeforeLeaveI, numEateriesI, totalQLine, maxLength;
 	  private ArrayList<Eatery> eateryArr = new ArrayList<>();
 	  private CIS163Q<Person> line = new CIS163Q<>();
 	  private static Clock clk = new Clock();
@@ -171,7 +171,7 @@ public class FCGUI extends JFrame implements ActionListener , ClockListener{
 			secBeforeLeaveI = Integer.parseInt(secBeforeLeave.getText());
 			numEateriesI = Integer.parseInt(numEateries.getText());
 			
-			runSim(secToNextI, secPerCashierI, totalTimeI, secPerEateryI, secBeforeLeaveI, numEateriesI);
+			setSim(secToNextI, secPerCashierI, totalTimeI, secPerEateryI, secBeforeLeaveI, numEateriesI);
 		}
 		if(e.getSource() == quitter){
 			System.exit(1);
@@ -180,11 +180,22 @@ public class FCGUI extends JFrame implements ActionListener , ClockListener{
 	}
 
 	
-	public void runSim(int secToNextI, int secPerCashierI, int totalTimeI, int secPerEateryI, int secBeforeLeaveI, int numEateriesI){
+	public void setSim(int secToNextI, int secPerCashierI, int totalTimeI, int secPerEateryI, int secBeforeLeaveI, int numEateriesI){
+		Sim s = new Sim();
+		clk.add(s);
+		s.setSecToNext(secToNextI);
+		s.setSecPerCashier(secPerCashierI);
+		s.setTotalTime(totalTimeI);
+		s.setSecPerEatery(secPerEateryI);
+		s.setSecBeforeLeave(secBeforeLeaveI);
+		s.setNumEateries(numEateriesI);
+		s.run();
+		s.addToLine();
+		System.out.println("Here after the sim call");
 		
 		
 		
-		clk.run(100000);
+		/*//clk.run(100000);
 		int through = 0, left = 0, max = 0, size = 0;;
 		int val = secBeforeLeaveI;
 		
@@ -206,13 +217,13 @@ public class FCGUI extends JFrame implements ActionListener , ClockListener{
 		
 		through = getTotalThru();
 		left = getTotalLeft();
-		max = getTotalMaxQ();
+		//max = getTotalMaxQ();
 		
 		System.out.println("Size of line in the GUI: " + line.size());
 		
 		throughInfo.setText("Through put is: " + through + " people.");
 		numberPeopleInfo.setText("People that are still in the Q: " + left + " people.");
-		maxQInfo.setText("Max Q length: " + max + " people.");	
+		maxQInfo.setText("Max Q length: " + maxLength + " people."); */	
 	}
 	
 	public int getTotalThru(){
@@ -231,17 +242,17 @@ public class FCGUI extends JFrame implements ActionListener , ClockListener{
 		return total;
 	}
 	
-	public int getTotalMaxQ(){
-		return totalQLine;
-	}
-	
 	public void transaction() throws EmptyQException{
 		Person tempPer = new Person();
+		System.out.println("In the transaction: ");
 		try{
 			if(cash.getFlag() == true){
 				tempPer = line.deQ();
-				//System.out.println("Size of line in the transactions: " + line.size());
+				System.out.println("Size of line in the transactions: " + line.size());
 				cash.setPerson(tempPer);
+				if(cash.getFlag() == false){
+					tempPer.getTickTime();
+				}
 			}
 		}
 		catch(EmptyQException e){
@@ -249,13 +260,8 @@ public class FCGUI extends JFrame implements ActionListener , ClockListener{
 		}
 	}
 	
-	public void addToLine(){
-		for(Eatery e : eateryArr){
-			if(e.getCurrentCompleted() != e.getThroughPut()){
-				line.enQ(e.personGetter());
-			}
-		}
-	}
+	
+
 
 	
 	public static void main(String[] args){
@@ -269,11 +275,17 @@ public class FCGUI extends JFrame implements ActionListener , ClockListener{
 		int next=0;
 		//System.out.println("Tick: " + tick+ "    next: " +next);
 		if(tick > next){
-			addToLine();
+			//addToLine();
 			next++;
 		}
-		
-		
-		
+		try {
+			transaction();
+		} catch (EmptyQException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(maxLength < line.size()){
+			maxLength = line.size();
+		}
 	}
 }
