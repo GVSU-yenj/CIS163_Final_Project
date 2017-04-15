@@ -35,11 +35,11 @@ public class FCGUI extends JFrame implements ActionListener , ClockListener{
 	  private static Clock clk = new Clock();
 	  private Cashier cash = new Cashier();;
 	 
-			
+	//This constructor instantiates the GUI elements		
 	  public FCGUI(){
 	    this.setDefaultCloseOperation(EXIT_ON_CLOSE);		
-			BorderLayout mainLayout = new BorderLayout();
-			this.setLayout(mainLayout);
+		BorderLayout mainLayout = new BorderLayout();
+		this.setLayout(mainLayout);
 	    
 	    inInfoPanel = new JPanel();
 	    GridLayout layout = new GridLayout(0, 2);
@@ -49,6 +49,7 @@ public class FCGUI extends JFrame implements ActionListener , ClockListener{
 	    this.add(inInfoPanel, BorderLayout.NORTH);
 	    Font myText = new Font(Font.SERIF, Font.BOLD, 20);
 	    
+	//The top part of the GUI asking for input
 	    Title = new JLabel("Input Information");
 	    Title.setFont(myText);
 	    inInfoPanel.add(Title);
@@ -103,7 +104,7 @@ public class FCGUI extends JFrame implements ActionListener , ClockListener{
 	    buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); 
 	    buttonPanel.setLayout(new GridLayout(0,2));
 
-	      //Jmoney: might have to add actionListeners for my buttons.
+	      //Buttons for the sim
 	      starter = new JButton("Start da Sim!");
 	      quitter = new JButton("Quit da Sim!");
 	     
@@ -115,10 +116,8 @@ public class FCGUI extends JFrame implements ActionListener , ClockListener{
 	     
 	     buttonPanel.add(starter);
 	     buttonPanel.add(quitter);
-	     
 	    
-	    
-	    
+	//The rest of the constructor is for the output
 	    outInfoPanel = new JPanel();
 	    GridLayout layout2 = new GridLayout(0, 2);
 	    layout2.setVgap(10);
@@ -159,8 +158,10 @@ public class FCGUI extends JFrame implements ActionListener , ClockListener{
 		return null;
 	}
 
+	/*
+	* @param e This will be the listener for whichever button gets pressed.
+	*/
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		if(e.getSource() == starter){
 			System.out.println("Hello here in the action listener");
 			secToNextI = Integer.parseInt(secToNext.getText());
@@ -169,7 +170,14 @@ public class FCGUI extends JFrame implements ActionListener , ClockListener{
 			secPerEateryI = Integer.parseInt(secPerEatery.getText());
 			secBeforeLeaveI = Integer.parseInt(secBeforeLeave.getText());
 			numEateriesI = Integer.parseInt(numEateries.getText());
-			
+			/*
+			* @param secToNextI The amount of time for a person to appear at the eatery
+			* @param secPerCashierI The amount of time someone will spend at the cashier
+			* @param totalTimeI The total time that the food court will be open
+			* @param secPerEatery How long each person spends at the eateries.
+			* @param secBeforeLeaveI How long a person will wait before leaving prematurely.
+			* @param numEateriesI
+			*/
 			runSim(secToNextI, secPerCashierI, totalTimeI, secPerEateryI, secBeforeLeaveI, numEateriesI);
 		}
 		if(e.getSource() == quitter){
@@ -282,6 +290,9 @@ public class FCGUI extends JFrame implements ActionListener , ClockListener{
 		
 	}
 
+	/*
+	*
+	*/
 	public void event(int tick) {
 		int next=0;
 		if(tick > next){
