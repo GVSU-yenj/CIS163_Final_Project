@@ -1,7 +1,6 @@
 package FoodCourt;
 
 import java.awt.*;
-
 import javax.swing.*;
 
 import FrontEnd.CIS163Q;
@@ -18,8 +17,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
-
-
 
 public class FCGUI extends JFrame implements ActionListener , ClockListener{
 	
@@ -217,14 +214,12 @@ public class FCGUI extends JFrame implements ActionListener , ClockListener{
 		cash.setCashtime(secPerCashierI);
 		clk.add(cash);
 		clk.run(totalTimeI);
-		
-		
+			
 		through = getTotalThru();
 		left = getTotalLeft();
 		int avg = avgPersonTime();
 		
 		//System.out.println("Size of line in the GUI: " + line.size());
-		
 		throughInfo.setText("Through put is: " + through + " people.");
 		avgTimeInfo.setText("  " + totalTickTime + " seconds");
 		numberPeopleInfo.setText("People that are still in the Q: " + left + " people.");
@@ -239,6 +234,9 @@ public class FCGUI extends JFrame implements ActionListener , ClockListener{
 		return total;
 	}
 		
+	/*
+	*@returns returns the amount of people left in the eateries
+	*/
 	public int getTotalLeft(){
 		int total = 0;
 		for(Eatery e: eateryArr){
@@ -246,6 +244,10 @@ public class FCGUI extends JFrame implements ActionListener , ClockListener{
 		}
 		return total;
 	}
+	
+	/*
+	*@returns returns the average amount of time a person was in line
+	*/
 	public int avgPersonTime(){
 		int avgtime = 0;
 		int thru = getTotalThru();
@@ -282,22 +284,22 @@ public class FCGUI extends JFrame implements ActionListener , ClockListener{
 		}
 	}
 	
-	
 	public static void main(String[] args){
 		FCGUI f = new FCGUI();
 		f.setVisible(true);
-		clk.add(f);
-		
+		clk.add(f);		
 	}
 
-	/*
-	*
+	/* The first part may add someone to the line,
+	* then it will try to perform a transaction.
+	* Lastly, it will increment "next."
+	* @param tick this is the amount of time that will pass
+	* @throws EmptyQException this will be thrown when there is nobody in the Queue.
 	*/
 	public void event(int tick) {
 		int next=0;
 		if(tick > next){
 			addToLine();
-			
 		
 		try {
 			transaction();
