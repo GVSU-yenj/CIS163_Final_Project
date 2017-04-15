@@ -259,6 +259,9 @@ public class FCGUI extends JFrame implements ActionListener , ClockListener{
 		return avgtime;
 	}
 	
+	/*
+	*@throws EmptyQException this will be thrown when there is no one in the queue.
+	*/
 	public void transaction() throws EmptyQException{
 		Person tempPer = new Person();
 		try{
@@ -279,6 +282,9 @@ public class FCGUI extends JFrame implements ActionListener , ClockListener{
 		}
 	}
 	
+	/*
+	* This method adds the people fomr the eateries to the main line/queue.
+	*/
 	public void addToLine(){
 		for(Eatery e : eateryArr){
 			if(e.getCurrentCompleted() != e.getThroughPut()){
