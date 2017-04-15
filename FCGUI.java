@@ -170,14 +170,7 @@ public class FCGUI extends JFrame implements ActionListener , ClockListener{
 			secPerEateryI = Integer.parseInt(secPerEatery.getText());
 			secBeforeLeaveI = Integer.parseInt(secBeforeLeave.getText());
 			numEateriesI = Integer.parseInt(numEateries.getText());
-			/*
-			* @param secToNextI The amount of time for a person to appear at the eatery
-			* @param secPerCashierI The amount of time someone will spend at the cashier
-			* @param totalTimeI The total time that the food court will be open
-			* @param secPerEatery How long each person spends at the eateries.
-			* @param secBeforeLeaveI How long a person will wait before leaving prematurely.
-			* @param numEateriesI
-			*/
+	
 			runSim(secToNextI, secPerCashierI, totalTimeI, secPerEateryI, secBeforeLeaveI, numEateriesI);
 		}
 		if(e.getSource() == quitter){
@@ -186,7 +179,15 @@ public class FCGUI extends JFrame implements ActionListener , ClockListener{
 		
 	}
 
-	
+			/*
+			*This function is where the calculations will be performed.
+			* @param secToNextI The amount of time for a person to appear at the eatery
+			* @param secPerCashierI The amount of time someone will spend at the cashier
+			* @param totalTimeI The total time that the food court will be open
+			* @param secPerEatery How long each person spends at the eateries
+			* @param secBeforeLeaveI How long a person will wait before leaving prematurely
+			* @param numEateriesI The amount of eateries that will spawn into the simulation
+			*/
 	public void runSim(int secToNextI, int secPerCashierI, int totalTimeI, int secPerEateryI, int secBeforeLeaveI, int numEateriesI){
 		/*Sim s = new Sim();
 		//clk.add(s);
@@ -280,8 +281,7 @@ public class FCGUI extends JFrame implements ActionListener , ClockListener{
 			}
 		}
 	}
-
-
+	
 	
 	public static void main(String[] args){
 		FCGUI f = new FCGUI();
