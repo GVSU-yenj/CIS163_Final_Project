@@ -226,6 +226,9 @@ public class FCGUI extends JFrame implements ActionListener , ClockListener{
 		maxQInfo.setText("Max Q length: " + maxLength + " people."); 
 	}
 	
+	/*
+	*@return 
+	*/
 	public int getTotalThru(){
 		int total = 0;
 		for(Eatery e: eateryArr){
@@ -235,7 +238,7 @@ public class FCGUI extends JFrame implements ActionListener , ClockListener{
 	}
 		
 	/*
-	*@returns returns the amount of people left in the eateries
+	*@return returns the amount of people left in the eateries
 	*/
 	public int getTotalLeft(){
 		int total = 0;
@@ -246,7 +249,7 @@ public class FCGUI extends JFrame implements ActionListener , ClockListener{
 	}
 	
 	/*
-	*@returns returns the average amount of time a person was in line
+	*@return returns the average amount of time a person was in line
 	*/
 	public int avgPersonTime(){
 		int avgtime = 0;
