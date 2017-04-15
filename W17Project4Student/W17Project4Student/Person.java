@@ -3,18 +3,26 @@
  */
 package FrontEnd;
 
-
 /**
  * @author   Roger Ferguson
  */
 public class Person implements ClockListener{
-	private int tickTime, flag;
-
+	private int tickTime, flag, hasFirstTickFlag, firstTick;
+	private double waitTime;
 	private Eatery Destination;
 	
 	// max time person stays in line
-	protected int boothTime;
+	protected double boothTime;
 	
+	public Person(){
+		this.tickTime= 0;
+		this.hasFirstTickFlag = 0;
+	}
+	
+	
+	public void setWaitTime(double time){
+		waitTime = time;
+	}
 	
 	public double getBoothTime() {
 		return boothTime;
@@ -37,7 +45,7 @@ public class Person implements ClockListener{
 	}
 
 	public void setEateryTime(double time) {
-		this.boothTime = (int) time;
+		this.boothTime = time;
 	}
 	
 	public int getFlag(){
@@ -46,7 +54,12 @@ public class Person implements ClockListener{
 	
 	@Override
 	public void event(int tick) {
-		if(tick == boothTime){
+		/*if(this.hasFirstTickFlag == 0){
+			firstTick = tick;
+			this.hasFirstTickFlag = 1;
+		}*/
+		setTickTime(tick);
+		if(tick >= waitTime){
 			flag = 1;
 		}
 		

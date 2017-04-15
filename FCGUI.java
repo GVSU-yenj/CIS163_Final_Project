@@ -5,8 +5,11 @@ import java.awt.*;
 import javax.swing.*;
 
 import FrontEnd.CIS163Q;
+import FrontEnd.Cashier;
 import FrontEnd.Clock;
+import FrontEnd.ClockListener;
 import FrontEnd.Eatery;
+import FrontEnd.EmptyQException;
 import FrontEnd.Person;
 import FrontEnd.PersonProducer;
 import FrontEnd.Sim;
@@ -18,7 +21,7 @@ import java.util.Random;
 
 
 
-public class FCGUI extends JFrame implements ActionListener {
+public class FCGUI extends JFrame implements ActionListener , ClockListener{
 	
 	  private static final long serialVersionUID = 1L;
 	  private JPanel inInfoPanel, buttonPanel, outInfoPanel;
@@ -26,11 +29,12 @@ public class FCGUI extends JFrame implements ActionListener {
 	  private JLabel NELabel, throughInfo, avgTimeInfo, numberPeopleInfo, maxQInfo;
 	  private JTextArea secToNext, secPerCashier, totalTime, secPerEatery, secBeforeLeave, numEateries;
 	  private JButton starter, quitter;
-	  private int secToNextI, secPerCashierI, totalTimeI, secPerEateryI, secBeforeLeaveI, numEateriesI, totalQLine;
+	  private int secToNextI, secPerCashierI, totalTimeI, secPerEateryI, secBeforeLeaveI, numEateriesI, totalQLine, maxLength, totalTickTime;
 	  private ArrayList<Eatery> eateryArr = new ArrayList<>();
 	  private CIS163Q<Person> line = new CIS163Q<>();
-	  
-	  private Sim S = new Sim();
+	  private static Clock clk = new Clock();
+	  private Cashier cash = new Cashier();;
+	 
 			
 	  public FCGUI(){
 	    this.setDefaultCloseOperation(EXIT_ON_CLOSE);		
@@ -150,6 +154,11 @@ public class FCGUI extends JFrame implements ActionListener {
 	    this.pack();
 	}
 
+	private Cashier Cashier() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource() == starter){
@@ -171,11 +180,20 @@ public class FCGUI extends JFrame implements ActionListener {
 
 	
 	public void runSim(int secToNextI, int secPerCashierI, int totalTimeI, int secPerEateryI, int secBeforeLeaveI, int numEateriesI){
+		/*Sim s = new Sim();
+		//clk.add(s);
+		s.setSecToNext(secToNextI);
+		s.setSecPerCashier(secPerCashierI);
+		s.setTotalTime(totalTimeI);
+		s.setSecPerEatery(secPerEateryI);
+		s.setSecBeforeLeave(secBeforeLeaveI);
+		s.setNumEateries(numEateriesI);
+		s.run();
+		//clk.run(totalTimeI);
+		System.out.println("Here after the sim call");
+		*/
 		
-		
-		Clock clk = new Clock();
-		clk.run(100000);
-		int through = 0, left = 0, max = 0;
+		int through = 0, left = 0, max = 0, size = 0;;
 		int val = secBeforeLeaveI;
 		
 		for(int i = 0; i < numEateriesI; i++){
@@ -185,23 +203,23 @@ public class FCGUI extends JFrame implements ActionListener {
 			clk.add(Ex);
 			Ex.setBoothTime(val);
 			eateryArr.add(Ex);
-			
-			//through += Ex.getThroughPut();
 		}
+		
+		cash.setCashtime(secPerCashierI);
+		clk.add(cash);
 		clk.run(totalTimeI);
+		
+		
 		through = getTotalThru();
 		left = getTotalLeft();
-		max = getTotalMaxQ();
+		int avg = avgPersonTime();
 		
-		System.out.println("Size of line: " + line.size());
+		//System.out.println("Size of line in the GUI: " + line.size());
 		
 		throughInfo.setText("Through put is: " + through + " people.");
+		avgTimeInfo.setText("  " + totalTickTime + " seconds");
 		numberPeopleInfo.setText("People that are still in the Q: " + left + " people.");
-		maxQInfo.setText("Max Q length: " + max + " people.");	
-	}
-	
-	public int getBoothTime(){
-		return this.secBeforeLeaveI;
+		maxQInfo.setText("Max Q length: " + maxLength + " people."); 
 	}
 	
 	public int getTotalThru(){
@@ -211,7 +229,7 @@ public class FCGUI extends JFrame implements ActionListener {
 		}
 		return total;
 	}
-	
+		
 	public int getTotalLeft(){
 		int total = 0;
 		for(Eatery e: eateryArr){
@@ -219,22 +237,67 @@ public class FCGUI extends JFrame implements ActionListener {
 		}
 		return total;
 	}
-	
-	public int getTotalMaxQ(){
-		return totalQLine;
+	public int avgPersonTime(){
+		int avgtime = 0;
+		int thru = getTotalThru();
+		System.out.println("thru: " + thru+ "  total tick time " + totalTickTime);
+		avgtime = totalTickTime / thru;
+		return avgtime;
 	}
 	
-	
-	public void addToLine(Person per){
-		line.enQ(per);
-		int size = line.size();
-		totalQLine = size;
-		System.out.println(size);
+	public void transaction() throws EmptyQException{
+		Person tempPer = new Person();
+		try{
+			if(cash.getFlag() == true){
+				tempPer = line.deQ();
+				//System.out.println("Size of line in the transactions: " + line.size());
+				cash.setPerson(tempPer);
+				totalTickTime = cash.getPersonTT();
+				System.out.println("TotalTime: " + totalTickTime);
+				/*if(cash.getFlag() == false){
+					totalTickTime += tempPer.getTickTime();
+					System.out.println("TotalTime: " + totalTickTime);
+				}*/
+			}
+		}
+		catch(EmptyQException e){
+			//e.printStackTrace();
+		}
 	}
+	
+	public void addToLine(){
+		for(Eatery e : eateryArr){
+			if(e.getCurrentCompleted() != e.getThroughPut()){
+				line.enQ(e.personGetter());
+			}
+		}
+	}
+
+
 	
 	public static void main(String[] args){
 		FCGUI f = new FCGUI();
 		f.setVisible(true);
+		clk.add(f);
+		
+	}
+
+	public void event(int tick) {
+		int next=0;
+		if(tick > next){
+			addToLine();
+			
+		
+		try {
+			transaction();
+		} catch (EmptyQException e) {
+			System.out.println("Main line is empty");
+		}
+		
+		if(maxLength < line.size()){
+			maxLength = line.size();
+		}
+		next++;
+		}
 	}
 }
-

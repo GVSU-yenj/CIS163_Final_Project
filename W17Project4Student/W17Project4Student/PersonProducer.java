@@ -38,7 +38,8 @@ public class PersonProducer implements ClockListener {
 			//int rNumber = (int)(Math.random() * 100);
 
 			person.setEateryTime(averageEateryTime*0.5*r.nextGaussian() + averageEateryTime +.5);
-			person.setTickTime(tick);
+			//System.out.println("Tick time: "+ tick);
+			person.setTickTime(tick % 900);
 			eatery.add(person);
 			
 		//	person.setDestination(theLocationAfterTheEatery);  // You can save off where the person should go.
