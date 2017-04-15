@@ -227,7 +227,7 @@ public class FCGUI extends JFrame implements ActionListener , ClockListener{
 	}
 	
 	/*
-	*@return 
+	*@return returns the total amount of people that have gone through the eateries
 	*/
 	public int getTotalThru(){
 		int total = 0;
