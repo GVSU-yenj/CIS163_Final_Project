@@ -31,13 +31,13 @@ public class Eatery implements ClockListener {
 	 */
 	public void event (int tick){ 
 		//System.out.println("Tick in the eatery before : " + tick);
+		currentCompleted = completed;
 		if (tick >= timeOfNextEvent) {
 //			if (person != null) { 			// Notice the delay that takes place here
 //				person.getDestination().add(person);    // take this person to the next station. 
 //			person = null;				// I have send the person on. 
 //			}
 			
-			currentCompleted = completed;
 			if (Q.size() >= 1) {
 				person = Q.remove(0);		// do not send this person as of yet, make them wait. 
 				setPerson(person);

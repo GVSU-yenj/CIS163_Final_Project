@@ -9,9 +9,9 @@ import java.util.ArrayList;
  * @author Roger Ferguson
  *
  */
-public class Sim implements ClockListener{
+public class Sim {
 	
-	private int secToNext, secPerCashier, totalTime, secPerEatery, secBeforeLeave, numEateries;
+	/*private int secToNext, secPerCashier, totalTime, secPerEatery, secBeforeLeave, numEateries;
 	private int totalThrough, totalLeft, avgTime, maxLength;
 	private Clock clk = new Clock();
 	private CIS163Q line = new CIS163Q();
@@ -29,6 +29,9 @@ public class Sim implements ClockListener{
 	}
 	
 	public void run(){
+		
+		
+		System.out.println("Num Eateries: " + this.numEateries);
 		for(int i = 0; i< this.numEateries; i++){
 			Eatery Ex = new Eatery();
 			PersonProducer produce = new PersonProducer(Ex, secToNext, secPerEatery);
@@ -37,8 +40,10 @@ public class Sim implements ClockListener{
 			Ex.setBoothTime(secBeforeLeave);
 			eateryArr.add(Ex);
 		}
+		System.out.println("total time: " + this.totalTime);
+		clk.run(totalTime);
 		
-		addToLine();
+		//addToLine();
 		
 		
 	}
@@ -50,6 +55,7 @@ public class Sim implements ClockListener{
 	 	
 	}*/
 	
+	/*
 	public void setSecToNext(int secToNext){
 		this.secToNext = secToNext;
 	}
@@ -91,11 +97,7 @@ public class Sim implements ClockListener{
 				System.out.println("Number of people in the line: " + line.size());
 			}
 		}
-	}
-	
-	
-	
-	
+	}*/
 	
 	public static void main (String[] args) {
 			
@@ -118,13 +120,4 @@ public class Sim implements ClockListener{
 			//System.out.println ("Max Q length:" + booth.getMaxQlength() + " people.");
 		
 		}
-
-	@Override
-	public void event(int tick) {
-		int next = 0;
-		if(tick > next){
-			addToLine();
-		}
-		
-	}
 	}

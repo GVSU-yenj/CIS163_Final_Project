@@ -1,7 +1,7 @@
 package FrontEnd;
 
 public class Cashier implements ClockListener{
-	private int nextCashTime, currentTime=0;
+	private int nextCashTime, currentTime=0, personTotalTime = 0;
 	private Person personAtCashier;
 	private boolean emptyCashierFlag;
 	
@@ -10,12 +10,13 @@ public class Cashier implements ClockListener{
 	public void event(int tick) {
 		if(personAtCashier == null){
 			emptyCashierFlag = true;
-			//System.out.println(x);
 		}
 		else{
 			emptyCashierFlag = false;
 		
 			if( tick > currentTime){
+				personTotalTime = personAtCashier.getTickTime();
+				
 				personAtCashier = null;
 				currentTime += this.nextCashTime;
 			}
@@ -39,6 +40,9 @@ public class Cashier implements ClockListener{
 	
 	public void setCashtime(int cashTime){
 		this.nextCashTime = cashTime;
+	}
+	public int getPersonTT(){
+		return personTotalTime;
 	}
 
 }

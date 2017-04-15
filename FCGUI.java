@@ -29,13 +29,12 @@ public class FCGUI extends JFrame implements ActionListener , ClockListener{
 	  private JLabel NELabel, throughInfo, avgTimeInfo, numberPeopleInfo, maxQInfo;
 	  private JTextArea secToNext, secPerCashier, totalTime, secPerEatery, secBeforeLeave, numEateries;
 	  private JButton starter, quitter;
-	  private int secToNextI, secPerCashierI, totalTimeI, secPerEateryI, secBeforeLeaveI, numEateriesI, totalQLine, maxLength;
+	  private int secToNextI, secPerCashierI, totalTimeI, secPerEateryI, secBeforeLeaveI, numEateriesI, totalQLine, maxLength, totalTickTime;
 	  private ArrayList<Eatery> eateryArr = new ArrayList<>();
 	  private CIS163Q<Person> line = new CIS163Q<>();
 	  private static Clock clk = new Clock();
 	  private Cashier cash = new Cashier();;
-	  
-	  private Sim S = new Sim();
+	 
 			
 	  public FCGUI(){
 	    this.setDefaultCloseOperation(EXIT_ON_CLOSE);		
@@ -171,7 +170,7 @@ public class FCGUI extends JFrame implements ActionListener , ClockListener{
 			secBeforeLeaveI = Integer.parseInt(secBeforeLeave.getText());
 			numEateriesI = Integer.parseInt(numEateries.getText());
 			
-			setSim(secToNextI, secPerCashierI, totalTimeI, secPerEateryI, secBeforeLeaveI, numEateriesI);
+			runSim(secToNextI, secPerCashierI, totalTimeI, secPerEateryI, secBeforeLeaveI, numEateriesI);
 		}
 		if(e.getSource() == quitter){
 			System.exit(1);
@@ -180,9 +179,9 @@ public class FCGUI extends JFrame implements ActionListener , ClockListener{
 	}
 
 	
-	public void setSim(int secToNextI, int secPerCashierI, int totalTimeI, int secPerEateryI, int secBeforeLeaveI, int numEateriesI){
-		Sim s = new Sim();
-		clk.add(s);
+	public void runSim(int secToNextI, int secPerCashierI, int totalTimeI, int secPerEateryI, int secBeforeLeaveI, int numEateriesI){
+		/*Sim s = new Sim();
+		//clk.add(s);
 		s.setSecToNext(secToNextI);
 		s.setSecPerCashier(secPerCashierI);
 		s.setTotalTime(totalTimeI);
@@ -190,12 +189,10 @@ public class FCGUI extends JFrame implements ActionListener , ClockListener{
 		s.setSecBeforeLeave(secBeforeLeaveI);
 		s.setNumEateries(numEateriesI);
 		s.run();
-		s.addToLine();
+		//clk.run(totalTimeI);
 		System.out.println("Here after the sim call");
+		*/
 		
-		
-		
-		/*//clk.run(100000);
 		int through = 0, left = 0, max = 0, size = 0;;
 		int val = secBeforeLeaveI;
 		
@@ -204,26 +201,25 @@ public class FCGUI extends JFrame implements ActionListener , ClockListener{
 			PersonProducer produce = new PersonProducer(Ex, secToNextI, secPerEateryI);
 			clk.add(produce);
 			clk.add(Ex);
-			//System.out.println("This is the amoutn of seconds the person entered. " + val);
 			Ex.setBoothTime(val);
 			eateryArr.add(Ex);
-			
-			//through += Ex.getThroughPut();
 		}
 		
+		cash.setCashtime(secPerCashierI);
 		clk.add(cash);
 		clk.run(totalTimeI);
 		
 		
 		through = getTotalThru();
 		left = getTotalLeft();
-		//max = getTotalMaxQ();
+		int avg = avgPersonTime();
 		
-		System.out.println("Size of line in the GUI: " + line.size());
+		//System.out.println("Size of line in the GUI: " + line.size());
 		
 		throughInfo.setText("Through put is: " + through + " people.");
+		avgTimeInfo.setText("  " + totalTickTime + " seconds");
 		numberPeopleInfo.setText("People that are still in the Q: " + left + " people.");
-		maxQInfo.setText("Max Q length: " + maxLength + " people."); */	
+		maxQInfo.setText("Max Q length: " + maxLength + " people."); 
 	}
 	
 	public int getTotalThru(){
@@ -241,26 +237,41 @@ public class FCGUI extends JFrame implements ActionListener , ClockListener{
 		}
 		return total;
 	}
+	public int avgPersonTime(){
+		int avgtime = 0;
+		int thru = getTotalThru();
+		System.out.println("thru: " + thru+ "  total tick time " + totalTickTime);
+		avgtime = totalTickTime / thru;
+		return avgtime;
+	}
 	
 	public void transaction() throws EmptyQException{
 		Person tempPer = new Person();
-		System.out.println("In the transaction: ");
 		try{
 			if(cash.getFlag() == true){
 				tempPer = line.deQ();
-				System.out.println("Size of line in the transactions: " + line.size());
+				//System.out.println("Size of line in the transactions: " + line.size());
 				cash.setPerson(tempPer);
-				if(cash.getFlag() == false){
-					tempPer.getTickTime();
-				}
+				totalTickTime = cash.getPersonTT();
+				System.out.println("TotalTime: " + totalTickTime);
+				/*if(cash.getFlag() == false){
+					totalTickTime += tempPer.getTickTime();
+					System.out.println("TotalTime: " + totalTickTime);
+				}*/
 			}
 		}
 		catch(EmptyQException e){
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 	
-	
+	public void addToLine(){
+		for(Eatery e : eateryArr){
+			if(e.getCurrentCompleted() != e.getThroughPut()){
+				line.enQ(e.personGetter());
+			}
+		}
+	}
 
 
 	
@@ -273,19 +284,20 @@ public class FCGUI extends JFrame implements ActionListener , ClockListener{
 
 	public void event(int tick) {
 		int next=0;
-		//System.out.println("Tick: " + tick+ "    next: " +next);
 		if(tick > next){
-			//addToLine();
-			next++;
-		}
+			addToLine();
+			
+		
 		try {
 			transaction();
 		} catch (EmptyQException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Main line is empty");
 		}
+		
 		if(maxLength < line.size()){
 			maxLength = line.size();
+		}
+		next++;
 		}
 	}
 }

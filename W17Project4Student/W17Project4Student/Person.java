@@ -7,12 +7,17 @@ package FrontEnd;
  * @author   Roger Ferguson
  */
 public class Person implements ClockListener{
-	private int tickTime, flag;
+	private int tickTime, flag, hasFirstTickFlag, firstTick;
 	private double waitTime;
 	private Eatery Destination;
 	
 	// max time person stays in line
 	protected double boothTime;
+	
+	public Person(){
+		this.tickTime= 0;
+		this.hasFirstTickFlag = 0;
+	}
 	
 	
 	public void setWaitTime(double time){
@@ -40,7 +45,6 @@ public class Person implements ClockListener{
 	}
 
 	public void setEateryTime(double time) {
-		//System.out.println("This is the value in the person: " + time);
 		this.boothTime = time;
 	}
 	
@@ -50,7 +54,12 @@ public class Person implements ClockListener{
 	
 	@Override
 	public void event(int tick) {
-		if(tick == waitTime){
+		/*if(this.hasFirstTickFlag == 0){
+			firstTick = tick;
+			this.hasFirstTickFlag = 1;
+		}*/
+		setTickTime(tick);
+		if(tick >= waitTime){
 			flag = 1;
 		}
 		
